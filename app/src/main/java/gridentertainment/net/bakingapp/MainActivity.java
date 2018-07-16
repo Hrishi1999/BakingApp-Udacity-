@@ -1,7 +1,9 @@
 package gridentertainment.net.bakingapp;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
             "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/";
     private RecyclerView mRecyclerView;
     private RecipeAdapter mAdapter;
+    private ArrayList<RecipeItem> recipe2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setDrawingCacheEnabled(true);
         mRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
-        ArrayList<RecipeItem> recipes = new ArrayList<>();
+        final ArrayList<RecipeItem> recipes = new ArrayList<>();
 
         for (int i = 0; i < 25; i++) {
             recipes.add(new RecipeItem(Parcel.obtain()));
@@ -71,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<ArrayList<RecipeItem>> call, @NonNull Response<ArrayList<RecipeItem>> response) {
                 assert response.body() != null;
                 ArrayList<RecipeItem> movies = response.body();
+                recipe2 = (ArrayList<RecipeItem>)response.body();
                 mAdapter.setRecipeList(movies);
                 mRecyclerView.setAdapter(mAdapter);
             }
@@ -80,6 +85,28 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("BAKING!!!", t.toString());
             }
         });
+
+        mRecyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(MainActivity.this, mRecyclerView, new RecyclerViewItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                Intent details=new Intent(MainActivity.this,DetailsActivity.class);
+
+                Bundle bundle=new Bundle();
+                bundle.putParcelableArrayList("steps",
+                        (ArrayList<? extends Parcelable>) recipe2.get(position).getSteps());
+                bundle.putParcelableArrayList("ingredients",
+                        (ArrayList<? extends Parcelable>) recipe2.get(position).getIngredients());
+                bundle.putString("recipe_name",recipe2.get(position).getName());
+                details.putExtra("bundle",bundle);
+                startActivity(details);
+
+            }
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
 
     }
 }

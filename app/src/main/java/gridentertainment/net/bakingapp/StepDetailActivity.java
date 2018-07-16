@@ -3,23 +3,23 @@ package gridentertainment.net.bakingapp;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 
-public class DetailsActivity extends AppCompatActivity {
+public class StepDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
+        setContentView(R.layout.activity_step_detail);
 
-        RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
+        StepDetailFragment stepDetailFragment = new StepDetailFragment();
 
-        Bundle bundle = getIntent().getBundleExtra("bundle");
-        recipeDetailFragment.setArguments(bundle);
+        Bundle bundle = getIntent().getBundleExtra("bundle2");
+        stepDetailFragment.setArguments(bundle);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .add(R.id.recipe_details_container, recipeDetailFragment)
+                .add(R.id.step_details_container, stepDetailFragment)
                 .commit();
+
     }
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -37,7 +38,7 @@ class RecipeViewHolder extends RecyclerView.ViewHolder
     }
 
     @SuppressLint("ResourceAsColor")
-    public void bind(final RecipeItem recipe, final RecipeAdapter.OnItemClickListener listener) {
+    public void bind(final RecipeItem recipe, final RecipeAdapter.OnItemClickListener listener, final int position) {
         textView.setText(recipe.getName());
         if(recipe.getImage()!=null)
         {
@@ -87,7 +88,7 @@ class RecipeViewHolder extends RecyclerView.ViewHolder
         {
             imageView.setVisibility(View.GONE);
         }
-        itemView.setOnClickListener(new View.OnClickListener() {
+        /*itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                Intent intent = new Intent(v.getContext(), DetailsActivity.class);
                 intent.putExtra("data", recipe);
@@ -96,7 +97,7 @@ class RecipeViewHolder extends RecyclerView.ViewHolder
                     v.getContext().startActivity(intent);
                 }
             }
-        });
+        });*/
     }
 
 }

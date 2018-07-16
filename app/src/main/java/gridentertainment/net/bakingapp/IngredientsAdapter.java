@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,55 +17,52 @@ import java.util.List;
 import gridentertainment.net.bakingapp.Models.Ingredients;
 import gridentertainment.net.bakingapp.Models.RecipeItem;
 
-public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsViewHolder>
-{
+public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.RecyclerHolder> {
 
-    private List<Ingredients> mIngregientsList;
-    private OnItemClickListener listener;
-    private LayoutInflater mInflater;
-    private Context mContext;
+    Context context;
+    private LayoutInflater inflater;
+    private ArrayList<Ingredients> ingredients;
 
-    public interface OnItemClickListener {
-        void onItemClick(RecipeItem item);
+
+    public IngredientsAdapter(Context context , ArrayList<Ingredients> ingredients) {
+        this.context = context;
+        this.ingredients=ingredients;
+        inflater=LayoutInflater.from(context);
     }
 
-    public IngredientsAdapter(Context context)
-    {
-        this.mContext = context;
-        this.mInflater = LayoutInflater.from(context);
-        this.mIngregientsList = new ArrayList<>();
-        this.listener = listener;
-    }
-
-    @NonNull
-    @Override
-    public IngredientsViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
-        View view = mInflater.inflate(R.layout.ing_item, parent, false);
-        IngredientsViewHolder viewHolder = new IngredientsViewHolder(view);
-        return viewHolder;
-}
 
     @Override
-    public void onBindViewHolder(@NonNull final IngredientsViewHolder holder, final int position)
-    {
-        holder.textView.setText(mIngregientsList.get(position).toString());
+    public IngredientsAdapter.RecyclerHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view=inflater.inflate(R.layout.ing_item,null);
+        return new IngredientsAdapter.RecyclerHolder(view);
     }
+
+    @Override
+    public void onBindViewHolder(RecyclerHolder holder, int position) {
+
+        holder.name.setText(ingredients.get(position).getIngredient());
+        holder.quantity.setText(""+ingredients.get(position).getQuantity());
+        holder.measure.setText(ingredients.get(position).getMeasure());
+
+    }
+
 
     @Override
     public int getItemCount()
     {
-        return (mIngregientsList == null) ? 0 : mIngregientsList.size();
+        return (ingredients == null) ? 0 : ingredients.size();
     }
 
-    public void setIngredientsList(ArrayList<Ingredients> ingList)
-    {
-        this.mIngregientsList.clear();
-        this.mIngregientsList.addAll(ingList);
-        notifyDataSetChanged();
+
+    class RecyclerHolder extends RecyclerView.ViewHolder {
+        TextView name,quantity,measure;
+
+        RecyclerHolder(View itemView) {
+            super(itemView);
+            name=(TextView) itemView.findViewById(R.id.name);
+            quantity=(TextView) itemView.findViewById(R.id.quantity);
+            measure=(TextView) itemView.findViewById(R.id. measure);
+        }
     }
 
-    public ArrayList getIngredientsList(){
-        return new ArrayList<Ingredients>(mIngregientsList);
-    }
 }
