@@ -1,13 +1,11 @@
 package gridentertainment.net.bakingapp;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -50,8 +48,8 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.RecyclerHold
 
         RecyclerHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.item_name);
-            root = (LinearLayout) itemView.findViewById(R.id.linearLayoutX);
+            title = itemView.findViewById(R.id.item_name);
+            root = itemView.findViewById(R.id.linearLayoutX);
         }
     }
 

@@ -17,9 +17,12 @@ public class StepDetailActivity extends AppCompatActivity {
         stepDetailFragment.setArguments(bundle);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.step_details_container, stepDetailFragment)
-                .commit();
 
+        if(savedInstanceState == null)
+        {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.step_details_container, stepDetailFragment)
+                    .commit();
+        }
     }
 }

@@ -25,7 +25,7 @@ import gridentertainment.net.bakingapp.Models.RecipeItem;
 
 class RecipeViewHolder extends RecyclerView.ViewHolder
 {
-    private static final String TAG = "Holder" ;
+    private static final String TAG = "Holder";
     public ImageView imageView;
     public TextView textView;
     public LinearLayout linearLayout;
@@ -33,20 +33,20 @@ class RecipeViewHolder extends RecyclerView.ViewHolder
     public RecipeViewHolder(View itemView) {
         super(itemView);
         imageView = itemView.findViewById(R.id.imageView);
-        textView = itemView.findViewById(R.id.title);
+        textView = itemView.findViewById(R.id.rec_item_title);
         linearLayout = itemView.findViewById(R.id.linearLayout);
     }
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint({"ResourceAsColor", "SetTextI18n"})
     public void bind(final RecipeItem recipe, final RecipeAdapter.OnItemClickListener listener, final int position) {
-        textView.setText(recipe.getName());
+        textView.setText(recipe.getName() + " - " + recipe.getServings() + " servings");
         if(recipe.getImage()!=null)
         {
             try
             {
                 Picasso.get()
                         .load(recipe.getImage())
-                        .placeholder(R.color.colorAccent)
+                        .placeholder(R.drawable.placeholder)
                         .error(R.color.colorAccent)
                         .into(new Target() {
                             @Override
@@ -80,24 +80,13 @@ class RecipeViewHolder extends RecyclerView.ViewHolder
             catch (Exception e)
             {
                 e.printStackTrace();
-                imageView.setVisibility(View.GONE);
+                imageView.setImageResource(R.drawable.placeholder);
             }
-
         }
         else
         {
-            imageView.setVisibility(View.GONE);
+            imageView.setImageResource(R.drawable.placeholder);
         }
-        /*itemView.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-               Intent intent = new Intent(v.getContext(), DetailsActivity.class);
-                intent.putExtra("data", recipe);
-                if(recipe.getName() != null)
-                {
-                    v.getContext().startActivity(intent);
-                }
-            }
-        });*/
+        //suggestions in better handling?
     }
-
 }

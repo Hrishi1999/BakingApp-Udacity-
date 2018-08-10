@@ -8,19 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import gridentertainment.net.bakingapp.Models.Ingredients;
 import gridentertainment.net.bakingapp.Models.RecipeItem;
-import gridentertainment.net.bakingapp.R;
-import gridentertainment.net.bakingapp.RecipeViewHolder;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder>
-{
+    {
 
-    private ArrayList<RecipeItem> mRecipeList;
-    private ArrayList<Ingredients> mIngredientsList;
-    private OnItemClickListener listener;
+        private ArrayList<RecipeItem> mRecipeList;
+        private OnItemClickListener listener;
     private LayoutInflater mInflater;
     private Context mContext;
 
@@ -62,9 +58,5 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder>
         this.mRecipeList.clear();
         this.mRecipeList.addAll(recipeList);
         notifyDataSetChanged();
-    }
-
-    public ArrayList getRecipeList(){
-        return new ArrayList<RecipeItem>(mRecipeList);
     }
 }

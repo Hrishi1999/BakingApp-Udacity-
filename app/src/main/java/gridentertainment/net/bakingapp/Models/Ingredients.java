@@ -19,6 +19,8 @@ public class Ingredients implements Parcelable {
         ingredient = in.readString();
     }
 
+    public Ingredients() {}
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         if (quantity == null) {

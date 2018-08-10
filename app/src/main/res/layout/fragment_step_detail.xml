@@ -6,11 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".StepDetailFragment">
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/playerView"
-        android:layout_width="382dp"
-        android:layout_height="230dp"
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="198dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/stepTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageViewStep"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_marginStart="8dp"
+        android:elevation="2dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,45 +35,56 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewDesc"
-        android:layout_width="356dp"
+        android:id="@+id/tv_desc"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="76dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Text"
+        android:layout_marginBottom="132dp"
+        android:gravity="center"
+        android:text="TextView"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/back_button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerView"
-        app:layout_constraintVertical_bias="0.216" />
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/fltBackButton"
+        app:layout_constraintEnd_toEndOf="@+id/video_view"
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="@+id/video_view" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/back_button"
-        android:layout_width="57dp"
-        android:layout_height="50dp"
+        android:id="@+id/fltBackButton"
+        android:layout_width="56dp"
+        android:layout_height="52dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
+        android:clickable="true"
         android:src="@drawable/ic_arrow_back_black_24dp"
-        app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/back_button2"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/back_button2"
-        android:layout_width="57dp"
-        android:layout_height="50dp"
+        android:id="@+id/fltForwardButton"
+        android:layout_width="56dp"
+        android:layout_height="52dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:clickable="true"
         android:src="@drawable/ic_arrow_forward_black_24dp"
-        app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/stepTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textColor="@android:color/black"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_desc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

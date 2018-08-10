@@ -1,21 +1,15 @@
 package gridentertainment.net.bakingapp;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import gridentertainment.net.bakingapp.Models.Ingredients;
-import gridentertainment.net.bakingapp.Models.RecipeItem;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.RecyclerHolder> {
 
@@ -55,13 +49,14 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
 
     class RecyclerHolder extends RecyclerView.ViewHolder {
-        TextView name,quantity,measure;
+
+        private TextView name, quantity, measure;
 
         RecyclerHolder(View itemView) {
             super(itemView);
-            name=(TextView) itemView.findViewById(R.id.name);
-            quantity=(TextView) itemView.findViewById(R.id.quantity);
-            measure=(TextView) itemView.findViewById(R.id. measure);
+            name = itemView.findViewById(R.id.name);
+            quantity = itemView.findViewById(R.id.quantity);
+            measure = itemView.findViewById(R.id.measure);
         }
     }
 

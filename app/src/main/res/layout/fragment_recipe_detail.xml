@@ -7,10 +7,30 @@
     android:padding="3dp"
     tools:context=".DetailsActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2.5dp"
+        android:text="Ingredients"
+        android:textColor="@color/colorPrimary"
+        android:textSize="17dp" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewIng"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2.5dp"
+        android:text="Steps"
+        android:textColor="@color/colorPrimary"
+        android:textSize="17dp" />
 
 
     <android.support.v7.widget.RecyclerView
