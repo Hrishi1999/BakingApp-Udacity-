@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -54,6 +56,8 @@ public class StepDetailFragment extends Fragment {
     String short_description;
     int currentPosition;
     long player_pos;
+    boolean isPlaying;
+    boolean isTablet;
 
     FragmentListener listener;
 
@@ -70,6 +74,7 @@ public class StepDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
+        isTablet = getResources().getBoolean(R.bool.isTablet);
 
         playerView = rootView.findViewById(R.id.video_view);
         descTv = rootView.findViewById(R.id.tv_desc);
@@ -97,12 +102,13 @@ public class StepDetailFragment extends Fragment {
             img = steps.get(currentPosition).getThumbnailURL();
             video_url = steps.get(currentPosition).getVideoURL();
             player_pos = savedInstanceState.getLong("player_pos");
+            isPlaying = savedInstanceState.getBoolean("player_state");
         }
 
         final int orientation = getResources().getConfiguration().orientation;
-        if(orientation == Configuration.ORIENTATION_LANDSCAPE && !isTablet())
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE && !isTablet)
         {
-            if(!video_url.isEmpty())
+            if(!TextUtils.isEmpty(video_url))
             {
                 ViewGroup.LayoutParams params = playerView.getLayoutParams();
                 params.height = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -117,11 +123,27 @@ public class StepDetailFragment extends Fragment {
         }
 
         updateViews(video_url, img);
-        if(!Objects.isNull(player_pos) && !video_url.isEmpty())
+        if(!Objects.isNull(player_pos) && !TextUtils.isEmpty(video_url))
         {
+            player.setPlayWhenReady(isPlaying);
             player.seekTo(player_pos);
         }
         stepTv.setText(short_description);
+
+        if(!TextUtils.isEmpty(video_url))
+        {
+            player.addListener(new Player.DefaultEventListener() {
+                @Override
+                public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                    if (playWhenReady && playbackState == Player.STATE_READY) {
+                        isPlaying = true;
+                    }
+                    else {
+                        isPlaying = false;
+                    }
+                }
+            });
+        }
 
         backbutton.setOnClickListener(new View.OnClickListener()
         {
@@ -191,13 +213,13 @@ public class StepDetailFragment extends Fragment {
 
     private void updateViews(String video, String image)
     {
-        if(!video.isEmpty())
+        if(!TextUtils.isEmpty(video_url))
         {
             initializePlayer(Uri.parse(video));
             imageView.setVisibility(View.GONE);
             playerView.setVisibility(View.VISIBLE);
         }
-        else if (!img.isEmpty()) {
+        else if (!TextUtils.isEmpty(img)) {
             playerView.setVisibility(View.GONE);
             imageView.setVisibility(View.VISIBLE);
             Picasso.get()
@@ -252,6 +274,7 @@ public class StepDetailFragment extends Fragment {
         try
         {
             outState.putLong("player_pos", player.getCurrentPosition());
+            outState.putBoolean("player_state", isPlaying);
         }
         catch (Exception e)
         {
@@ -267,6 +290,9 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (Util.SDK_INT <= 23 || player == null) {
+            initializePlayer(Uri.parse(video_url));
+        }
     }
 
     @Override
@@ -285,24 +311,9 @@ public class StepDetailFragment extends Fragment {
         }
     }
 
-    public boolean isTablet() {
-        try
-        {
-            DisplayMetrics dm = getActivity().getResources().getDisplayMetrics();
-            float screenWidth  = dm.widthPixels / dm.xdpi;
-            float screenHeight = dm.heightPixels / dm.ydpi;
-            double size = Math.sqrt(Math.pow(screenWidth, 2) +
-                    Math.pow(screenHeight, 2));
-            return size >= 6;
-        } catch(Throwable t) {
-            return false;
-        }
-
-    }
-
     @SuppressLint("InlinedApi")
     private void hideSystemUi() {
-        if(isTablet())
+        if(isTablet)
         {
             return;
         }

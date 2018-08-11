@@ -1,6 +1,7 @@
 package gridentertainment.net.bakingapp;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,8 @@ public class RecipeDetailFragment extends android.support.v4.app.Fragment {
     ArrayList<Steps> steps;
     FragmentListener listener;
     int currentpos;
+    private boolean isTablet;
+    private boolean isadded = true;
 
     public RecipeDetailFragment(){}
 
@@ -30,6 +33,7 @@ public class RecipeDetailFragment extends android.support.v4.app.Fragment {
 
         final int orientation = getResources().getConfiguration().orientation;
         View rootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
+        isTablet = getResources().getBoolean(R.bool.isTablet);
 
         RecyclerView ingRv = rootView.findViewById(R.id.recyclerViewIng);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -44,6 +48,7 @@ public class RecipeDetailFragment extends android.support.v4.app.Fragment {
             ingredients = savedInstanceState.getParcelableArrayList("ingredients");
             steps = savedInstanceState.getParcelableArrayList("steps");
             currentpos = savedInstanceState.getInt("position");
+            isadded = savedInstanceState.getBoolean("current");
         }
         else
         {
@@ -57,12 +62,13 @@ public class RecipeDetailFragment extends android.support.v4.app.Fragment {
         ingRv.setAdapter(new IngredientsAdapter(getActivity(), ingredients));
         stepsRv.setAdapter(new StepsAdapter(getActivity(), steps));
 
-         if(isTablet())
+         if(isTablet)
             {
-                if(listener!=null)
-            {
-                listener.setStep(currentpos,steps);
-            }
+                if(listener != null && isadded)
+                {
+                    listener.setStep(currentpos,steps);
+                    isadded = !isadded;
+                }
         }
 
         stepsRv.addOnItemTouchListener(new RecyclerViewItemClickListener(getActivity(), stepsRv, new RecyclerViewItemClickListener.OnItemClickListener() {
@@ -70,7 +76,7 @@ public class RecipeDetailFragment extends android.support.v4.app.Fragment {
             public void onItemClick(View view, int position) {
                 Bundle bundle = new Bundle();
                 setPosition(position);
-                if (!isTablet())
+                if (!isTablet)
                 {
                     Intent details = new Intent(getActivity(),StepDetailActivity.class);
                     bundle.putInt("index", position);
@@ -78,7 +84,7 @@ public class RecipeDetailFragment extends android.support.v4.app.Fragment {
                     details.putExtra("bundle2", bundle);
                     startActivity(details);
                 }
-                else if(isTablet())
+                else if(isTablet)
                 {
                     listener.setStep(position, steps);
                 }
@@ -101,28 +107,13 @@ public class RecipeDetailFragment extends android.support.v4.app.Fragment {
         this.listener = listener;
     }
 
-
-    public boolean isTablet() {
-        try
-        {
-            DisplayMetrics dm = getActivity().getResources().getDisplayMetrics();
-            float screenWidth  = dm.widthPixels / dm.xdpi;
-            float screenHeight = dm.heightPixels / dm.ydpi;
-            double size = Math.sqrt(Math.pow(screenWidth, 2) +
-                    Math.pow(screenHeight, 2));
-            return size >= 6;
-        } catch(Throwable t) {
-            return false;
-        }
-
-    }
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("ingredients",ingredients);
         outState.putParcelableArrayList("steps",steps);
         outState.putInt("position",currentpos);
+        outState.putBoolean("changed", isadded);
     }
 
 

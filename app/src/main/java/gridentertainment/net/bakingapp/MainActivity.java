@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private RecipeAdapter mAdapter;
     private ArrayList<RecipeItem> recipe2;
 
+    private boolean isTablet;
+
     @Nullable
     private CountingIdlingResource mIdlingResource = new CountingIdlingResource("load");
 
@@ -45,10 +47,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        isTablet = getResources().getBoolean(R.bool.isTablet);
         mRecyclerView = findViewById(R.id.recyclerViewMain);
 
         int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT && isTablet())
+        if (orientation == Configuration.ORIENTATION_PORTRAIT && isTablet)
         {
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         }
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         }
 
+
         mAdapter = new RecipeAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
@@ -68,16 +72,6 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setDrawingCacheEnabled(true);
         mRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         mRecyclerView.setVisibility(View.INVISIBLE);
-
-        final ArrayList<RecipeItem> recipes = new ArrayList<>();
-
-        //used magic numbers here, what can be another possible way?
-        //instead of 25?
-        for (int i = 0; i < 25; i++) {
-            recipes.add(new RecipeItem(Parcel.obtain()));
-        }
-
-        mAdapter.setRecipeList(recipes);
 
         if(savedInstanceState == null)
         {
@@ -113,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
             recipe2 = savedInstanceState.getParcelableArrayList("recipeItem");
             mAdapter.setRecipeList(recipe2);
             mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.setVisibility(View.VISIBLE);
         }
 
 
@@ -147,21 +142,6 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("recipeItem", recipe2);
-    }
-
-    public boolean isTablet() {
-        try {
-
-            DisplayMetrics dm = this.getResources().getDisplayMetrics();
-            float screenWidth = dm.widthPixels / dm.xdpi;
-            float screenHeight = dm.heightPixels / dm.ydpi;
-            double size = Math.sqrt(Math.pow(screenWidth, 2) +
-                    Math.pow(screenHeight, 2));
-            return size >= 6;
-        }
-        catch (Throwable t) {
-            return false;
-        }
     }
 
 }

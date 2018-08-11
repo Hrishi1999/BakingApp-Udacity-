@@ -14,6 +14,7 @@ public class DetailsActivity extends AppCompatActivity implements FragmentListen
     private FragmentManager fragmentManager;
     private RecipeDetailFragment recipeDetailFragment;
     private String title;
+    private boolean isTablet;
 
 
     @Override
@@ -23,6 +24,8 @@ public class DetailsActivity extends AppCompatActivity implements FragmentListen
         setContentView(R.layout.activity_details);
 
         fragmentManager = getSupportFragmentManager();
+        isTablet = getResources().getBoolean(R.bool.isTablet);
+
 
         if(savedInstanceState==null)
         {
@@ -30,30 +33,31 @@ public class DetailsActivity extends AppCompatActivity implements FragmentListen
             recipeDetailFragment = new RecipeDetailFragment();
             recipeDetailFragment.setArguments(bundle);
             title = bundle.getString("recipe_name");
+            fragmentManager.beginTransaction()
+                    .replace(R.id.recipe_details_container, recipeDetailFragment).commit();
         }
         else
         {
             title = savedInstanceState.getString("title");
             recipeDetailFragment = (RecipeDetailFragment) fragmentManager.getFragment(savedInstanceState, "detail");
+            if(!recipeDetailFragment.isAdded())
+            {
+                fragmentManager.beginTransaction()
+                        .replace(R.id.recipe_details_container, recipeDetailFragment).commit();
+            }
         }
         setTitle(title);
 
-        if(isTablet())
+        if(isTablet)
         {
             recipeDetailFragment.setFragmentListener(this);
-        }
-
-        if(recipeDetailFragment != null)
-        {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.recipe_details_container, recipeDetailFragment).commit();
         }
 
     }
 
     @Override
     public void setStep(int index, ArrayList<Steps> steps) {
-        if(isTablet())
+        if(isTablet)
         {
             StepDetailFragment stepDetailsFragment = new StepDetailFragment();
             Bundle bundle = new Bundle();
@@ -69,27 +73,12 @@ public class DetailsActivity extends AppCompatActivity implements FragmentListen
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (isTablet() && recipeDetailFragment!=null)
+        if (isTablet && recipeDetailFragment!=null)
         {
             try{
                 fragmentManager.putFragment(outState, "detail", recipeDetailFragment);
             }catch (NullPointerException e) {}
         }
         outState.putString("title", title);
-    }
-
-    public boolean isTablet() {
-        try {
-
-            DisplayMetrics dm = this.getResources().getDisplayMetrics();
-            float screenWidth = dm.widthPixels / dm.xdpi;
-            float screenHeight = dm.heightPixels / dm.ydpi;
-            double size = Math.sqrt(Math.pow(screenWidth, 2) +
-                    Math.pow(screenHeight, 2));
-            return size >= 6;
-        }
-        catch (Throwable t) {
-            return false;
-        }
     }
 }
